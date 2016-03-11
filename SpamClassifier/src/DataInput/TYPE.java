@@ -1,3 +1,3 @@
 package DataInput;
 
-public enum TYPE {HAM,SPAM;}
+public enum TYPE {HAM,SPAM,UNKNOWN;}

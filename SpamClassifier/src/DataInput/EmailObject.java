@@ -24,6 +24,8 @@ public EmailObject(String c,TYPE t) {
 	this.t=t;
 }
 
+
+
 public TYPE getType(){return this.t;}
 
 public void resetStream(){

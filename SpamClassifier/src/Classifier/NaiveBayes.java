@@ -12,7 +12,7 @@ public class NaiveBayes {
 	this.builder=builder;
 }
 	
-	private TYPE classify(EmailObject email){
+	public TYPE classify(EmailObject email){
 		
 		double probability_spam = 0,probability_ham = 0;
 		double number_of_ham=builder.getHAM_EMAILS();
@@ -38,6 +38,8 @@ public class NaiveBayes {
 		
 		
 	}
+	
+	
 	
 	public void classifyByDatasetReader(DatasetReader reader){
 		System.out.println("\nClassifying test emails..");
