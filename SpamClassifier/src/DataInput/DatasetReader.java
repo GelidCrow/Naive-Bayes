@@ -24,8 +24,6 @@ public class DatasetReader {
 	
 	private String HAM="Ham/";
 	private String SPAM="Spam/";
-	private long HAMS_NUMBER=0;
-	private long SPAMS_NUMBER=0;
 	
 	
 	public static void main(String[] args){
@@ -57,7 +55,7 @@ public void readEmails(){
 	System.out.println(hams_emails.size()+" ham emails loaded");
 	System.out.println("Splitting dataset in training and test");
 	split_dataset(hams_emails,spams_emails);
-	System.out.println("Training spam emails:"+this.SPAMS_NUMBER+" - "+"Training hams emails:"+this.HAMS_NUMBER);
+	System.out.println("Training spam emails:"+spams_emails_training.size()+" - "+"Training hams emails:"+hams_emails_training.size());
 	
 }
 private void split_dataset(List<EmailObject> hams_emails,List<EmailObject> spams_emails) {
@@ -71,8 +69,7 @@ private void split_dataset(List<EmailObject> hams_emails,List<EmailObject> spams
 	this.setSpams_emails_training(spams_emails.subList(0, (int)((spamsize/100)*80)));
 	this.setSpams_emails_test(spams_emails.subList( (int)((spamsize/100)*80), spams_emails.size()));
 	
-	this.SPAMS_NUMBER=this.spams_emails_training.size();
-	this.HAMS_NUMBER=this.hams_emails_training.size();
+	
 }
 
 
@@ -104,6 +101,7 @@ private List<EmailObject> readSpams() {
 				catch(IOException e1){
 					
 				}
+				
 			}
 				
 		}

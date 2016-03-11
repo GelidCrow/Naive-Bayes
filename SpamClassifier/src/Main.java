@@ -1,4 +1,5 @@
 import Build.Builder;
+import Classifier.NaiveBayes;
 import DataInput.DatasetReader;
 import DataInput.DatasetReaderException;
 
@@ -20,6 +21,7 @@ class Main{
 		catch(DatasetReaderException e){
 			System.out.println(e);
 		}
-		
+		NaiveBayes nb=new NaiveBayes(builder);
+		nb.classifyByDatasetReader(reader);
 	}
 }
