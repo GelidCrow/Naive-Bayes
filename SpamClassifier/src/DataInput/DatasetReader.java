@@ -24,12 +24,7 @@ public class DatasetReader {
 	
 	private String HAM="Ham/";
 	private String SPAM="Spam/";
-	
-	
-	public static void main(String[] args){
-	DatasetReader d=new DatasetReader();
-	d.readEmails();
-	}
+
 	
 	
 	
