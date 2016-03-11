@@ -17,7 +17,11 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 public class DatasetReader {
 	public String DATASET_PATH;
-	private List<EmailObject> emails=new LinkedList<EmailObject>();
+	private List<EmailObject> hams_emails_training=new LinkedList<EmailObject>();
+	private List<EmailObject> spams_emails_training=new LinkedList<EmailObject>();
+	private List<EmailObject> hams_emails_test=new LinkedList<EmailObject>();
+	private List<EmailObject> spams_emails_test=new LinkedList<EmailObject>();
+	
 	private String HAM="Ham/";
 	private String SPAM="Spam/";
 	private long HAMS_NUMBER=0;
@@ -47,17 +51,43 @@ public DatasetReader(String d){
 
 public void readEmails(){
 	System.out.println("Loading the training set..");
-	readHams();
-	readSpams();
-	System.out.println(this.SPAMS_NUMBER+" spam emails loaded");
-	System.out.println(this.HAMS_NUMBER+" ham emails loaded");
+	List<EmailObject> hams_emails=readHams();
+	List<EmailObject> spams_emails=readSpams();
+	System.out.println(spams_emails.size()+" spam emails loaded");
+	System.out.println(hams_emails.size()+" ham emails loaded");
+	System.out.println("Splitting dataset in training and test");
+	split_dataset(hams_emails,spams_emails);
+	System.out.println("Training spam emails:"+this.SPAMS_NUMBER+" - "+"Training hams emails:"+this.HAMS_NUMBER);
 	
 }
-private void readSpams() {
-	File ham_folder=new File(DATASET_PATH+SPAM);
-	List<File> ham_files=Arrays.asList(ham_folder.listFiles());
-	for(File f:ham_files){
+private void split_dataset(List<EmailObject> hams_emails,List<EmailObject> spams_emails) {
+	long hamsize=hams_emails.size();
+	long spamsize=spams_emails.size();
+	//Take the 80% of Hams for training
+	this.setHams_emails_training(hams_emails.subList(0, (int)((hamsize/100)*80)));
+	this.setHams_emails_test(hams_emails.subList((int)((hamsize/100)*80),hams_emails.size()));
+	
+		//Take the 80% of Spams for training
+	this.setSpams_emails_training(spams_emails.subList(0, (int)((spamsize/100)*80)));
+	this.setSpams_emails_test(spams_emails.subList( (int)((spamsize/100)*80), spams_emails.size()));
+	
+	this.SPAMS_NUMBER=this.spams_emails_training.size();
+	this.HAMS_NUMBER=this.hams_emails_training.size();
+}
+
+
+
+
+
+
+
+private List<EmailObject> readSpams() {
+	File spam_folder=new File(DATASET_PATH+SPAM);
+	List<File> spam_files=Arrays.asList(spam_folder.listFiles());
+	List<EmailObject> emails=new LinkedList<EmailObject>();
+	for(File f:spam_files){
 		TarArchiveInputStream tar_stream=null;
+		System.out.println(f.getName());
 	try {
 		GZIPInputStream gzip_stream=new GZIPInputStream(new FileInputStream(f));
 		tar_stream=new TarArchiveInputStream(gzip_stream);
@@ -69,7 +99,7 @@ private void readSpams() {
 				try{
 				String content=fetchContent(br,TYPE.SPAM);
 				emails.add(new EmailObject(content, TYPE.SPAM));
-				HAMS_NUMBER++;
+				
 				}
 				catch(IOException e1){
 					
@@ -91,20 +121,16 @@ private void readSpams() {
 		}
 	}
 }
-	
+	return emails;
 	
 }
 
-
-
-
-
-
-
-private void readHams() {
+private List<EmailObject> readHams() {
 	File ham_folder=new File(DATASET_PATH+HAM);
 	List<File> ham_files=Arrays.asList(ham_folder.listFiles());
+	List<EmailObject> emails=new LinkedList<EmailObject>();
 	for(File f:ham_files){
+		System.out.println(f.getName());
 		TarArchiveInputStream tar_stream=null;
 	try {
 		GZIPInputStream gzip_stream=new GZIPInputStream(new FileInputStream(f));
@@ -117,7 +143,7 @@ private void readHams() {
 				try{
 				String content=fetchContent(br,TYPE.HAM);
 				emails.add(new EmailObject(content, TYPE.HAM));
-				SPAMS_NUMBER++;
+				
 				}
 				catch(IOException e1){
 					
@@ -139,7 +165,7 @@ private void readHams() {
 		}
 	}
 }
-	
+return emails;	
 }
 private String fetchContent(BufferedReader br,TYPE t) throws IOException {
 	
@@ -158,9 +184,90 @@ private String fetchContent(BufferedReader br,TYPE t) throws IOException {
 }
 
 
-public List<EmailObject> getEmails(){
-	return this.emails;
+public List<EmailObject> getTrainingEmails(){
+List<EmailObject> trainingset=new LinkedList<>(this.hams_emails_training);
+trainingset.addAll(this.spams_emails_training);
+return trainingset;
 }
 
+
+
+
+
+
+
+public List<EmailObject> getHams_emails_training() {
+	return hams_emails_training;
+}
+
+
+
+
+
+
+
+public void setHams_emails_training(List<EmailObject> hams_emails_training) {
+	this.hams_emails_training = hams_emails_training;
+}
+
+
+
+
+
+
+
+public List<EmailObject> getSpams_emails_training() {
+	return spams_emails_training;
+}
+
+
+
+
+
+
+
+public void setSpams_emails_training(List<EmailObject> spams_emails_training) {
+	this.spams_emails_training = spams_emails_training;
+}
+
+
+
+
+
+
+
+public List<EmailObject> getHams_emails_test() {
+	return hams_emails_test;
+}
+
+
+
+
+
+
+
+public void setHams_emails_test(List<EmailObject> hams_emails_test) {
+	this.hams_emails_test = hams_emails_test;
+}
+
+
+
+
+
+
+
+public List<EmailObject> getSpams_emails_test() {
+	return spams_emails_test;
+}
+
+
+
+
+
+
+
+public void setSpams_emails_test(List<EmailObject> spams_emails_test) {
+	this.spams_emails_test = spams_emails_test;
+}
 
 }

@@ -26,12 +26,12 @@ public  class Builder {
 	
 	public void buildClassifier(DatasetReader reader) throws DatasetReaderException{
 		if(reader!=null){
-			List<EmailObject> emails=reader.getEmails();
+			List<EmailObject> emails=reader.getTrainingEmails();
 			for(EmailObject email:emails){
 				addToMap(email);
 			}
 		this.Dictionary_size=map.size();
-		System.out.println("Builder trained.Total terms:"+Dictionary_size);
+		System.out.println("Builder trained on "+emails.size()+" emails."+"Total terms:"+Dictionary_size);
 		}
 		else
 			throw new DatasetReaderException("Could not build the classifier because the DatasetReader is not initialized.");
