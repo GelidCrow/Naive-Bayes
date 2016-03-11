@@ -3,12 +3,9 @@ package DataInput;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -159,5 +156,11 @@ private String fetchContent(BufferedReader br,TYPE t) throws IOException {
 		}
 	return (s.toString());
 }
+
+
+public List<EmailObject> getEmails(){
+	return this.emails;
+}
+
 
 }

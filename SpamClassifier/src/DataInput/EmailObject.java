@@ -10,12 +10,12 @@ public class EmailObject {
 private TYPE t;
 private EnglishAnalyzer analyzer;
 private TokenStream stream;
-
+private CharTermAttribute att;
 EmailObject(String c,TYPE t) {
 	analyzer=new EnglishAnalyzer();
 	try {
 		stream=analyzer.tokenStream("corpus", c);
-		stream.addAttribute(CharTermAttribute.class);
+		att=stream.addAttribute(CharTermAttribute.class);
 		stream.reset();
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
@@ -43,7 +43,7 @@ public boolean nextToken(){
 }
 
 public String getToken(){
-	return stream.getAttribute(CharTermAttribute.class).toString();
+	return this.att.toString();
 }
 
 }
